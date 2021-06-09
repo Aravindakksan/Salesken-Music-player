@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="music-player">
+        <div class ="bargrid container">
+            <div class="flex">
+                <svg width="1000" height="250">
+                    <rect x="80" y="150"  width="80" height="25"/>
+                    <text x="100" y="170" font-family="Verdana" font-size="15" fill="white" >Intro</text>
+                    <line x1="120" y1="175" x2="120" y2="390" />
+                    <rect x="200" y="130"  width="100" height="25"/>
+                    <text x="220" y="150" font-family="Verdana" font-size="15" fill="white">High</text>
+                    <line x1="250" y1="155" x2="250" y2="390" />
+                    <rect x="400" y="100"  width="120" height="25"/>
+                    <text x="430" y="120" font-family="Verdana" font-size="15" fill="white">Energetic</text>
+                    <line x1="460" y1="125" x2="460" y2="390" />
+                    <rect x="650" y="110"  width="100" height="25"/>
+                    <text x="670" y="130" font-family="Verdana" font-size="15" fill="white">Lovely</text>
+                    <line x1="700" y1="135" x2="700" y2="390" />
+                    <rect x="750" y="150"  width="80" height="25"/>
+                    <text x="770" y="170" font-family="Verdana" font-size="15" fill="white">End</text>
+                    <line x1="800" y1="175" x2="800" y2="390" />
+                </svg>
+            </div> 
+            <ul id="bar-grid-ul" style="list-style-type:none;">
+            </ul>
+        </div>
+        <div id="menu" class="container">
+            <a><span id="playpausebtn" class="fa fa-play"></span></a>
+        </div>
+</div>
+</body>
+<script>
+    var audioElement = document.createElement('audio');
+    audioElement['src']='https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3';
+    var playpausebtn = document.getElementById("playpausebtn");
+    var barGridUl = document.getElementById("bar-grid-ul");
+    const n_bars =100;
+    var individual_duration=0;
+    var barCode ='<svg width="400" height="180"><rect x="160" y="150"  width="100" height="25"style="fill:red;stroke:black;stroke-width:5;opacity:0.5"/> </svg>';
+    audioElement.onloadedmetadata = function() {
+        console.log(audioElement.duration);
+        const duration=audioElement.duration;
+        individual_duration=parseInt(duration/n_bars);
+        for(var i=1;i<=n_bars;i++){
+            barGridUl.innerHTML +='<li> <input id="'+i+'" onclick="move(event)" type="text" readonly></li>';
+            document.getElementById(i).style.height=Math.floor(Math.random() * (200 - 100 + 1) + 100)+"px";   
+            if(i%2==0){
+                document.getElementById(i).style.backgroundColor="#ffafbd";   
+            }
+            else if(i%5==0){
+                document.getElementById(i).style.backgroundColor="#2193b0";
+            }
+            else{
+                document.getElementById(i).style.backgroundColor="#cc2b5e";
+            }
+        }
+    };
+    function move(event){
+        if(playpausebtn.className=="fa fa-pause"){
+            audioElement.currentTime=parseInt(event.target['id']*individual_duration);
+            console.log(audioElement.currentTime)
+        }
+    }
+    $(document).ready(function(){
+        var playpausebtn = $('#playpausebtn');
+        audioElement.setAttribute('src','https://m.tamildownloads.net/tamilmp3/load/Tamil%20Mp3%20Songs/2020%20Songs/Doctor%20Mp3%20Songs/Chellamma%20-%20Tamildownloads.Net.m4a')/*,'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3')*/
+        playpausebtn.on('click',function(){
+        if(playpausebtn.attr('class')=='fa fa-play'){
+            audioElement.play();
+            playpausebtn.attr('class','fa fa-pause');
+        }
+        else{
+            audioElement.pause();
+            playpausebtn.attr('class','fa fa-play');
+        }
+    });
+    });
+</script>
+</html>
