@@ -10,7 +10,6 @@
 svg rect{
     position: relative;
     z-index:1;
-    /*margin:30px;*/
     top:5%;
     bottom:5%;
     height:25px;
