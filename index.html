@@ -47,14 +47,17 @@
     var barGridUl = document.getElementById("bar-grid-ul");
     const n_bars =100;
     var individual_duration=0;
+    var j=0;
+    var ID;
+    var bar;
     var barCode ='<svg width="400" height="180"><rect x="160" y="150"  width="100" height="25"style="fill:red;stroke:black;stroke-width:5;opacity:0.5"/> </svg>';
     audioElement.onloadedmetadata = function() {
-        console.log(audioElement.duration);
         const duration=audioElement.duration;
-        individual_duration=parseInt(duration/n_bars);
+        individual_duration=(duration)/(n_bars);
         for(var i=1;i<=n_bars;i++){
             barGridUl.innerHTML +='<li> <input id="'+i+'" onclick="move(event)" type="text" readonly></li>';
             document.getElementById(i).style.height=Math.floor(Math.random() * (200 - 100 + 1) + 100)+"px";   
+            document.getElementById(i).style.opacity="0.5";   
             if(i%2==0){
                 document.getElementById(i).style.backgroundColor="#ffafbd";   
             }
@@ -64,12 +67,27 @@
             else{
                 document.getElementById(i).style.backgroundColor="#cc2b5e";
             }
+
         }
     };
     function move(event){
         if(playpausebtn.className=="fa fa-pause"){
             audioElement.currentTime=parseInt(event.target['id']*individual_duration);
-            console.log(audioElement.currentTime)
+            if(j>0){
+                for(var k=j;k<=event.target['id'];k++){
+                    document.getElementById(k).style.opacity="1";
+                }
+            }
+            j=event.target['id']-1;
+            clearInterval(ID);
+            ID=setInterval(highlight,individual_duration*1000);
+        }
+    }
+    function highlight(){
+        if(j<n_bars){
+        j+=1;
+        bar=document.getElementById(j);
+        bar.style.opacity='1';
         }
     }
     $(document).ready(function(){
@@ -79,10 +97,23 @@
         if(playpausebtn.attr('class')=='fa fa-play'){
             audioElement.play();
             playpausebtn.attr('class','fa fa-pause');
+            clearInterval(ID);
+            ID=setInterval(highlight,individual_duration*1000);           
         }
-        else{
+        else if(playpausebtn.attr('class')=='fa fa-pause' && audioElement.currentTime!=audioElement.duration){
             audioElement.pause();
             playpausebtn.attr('class','fa fa-play');
+            clearInterval(ID);
+        }
+        if(audioElement.duration==audioElement.currentTime){
+            playpausebtn.attr('class','fa fa-play');
+            j=0;
+            for(var i=1;i<=n_bars;i++){
+                $("#"+i).css('opacity','0.5');
+            }
+            if(j==0){
+            clearInterval(ID);
+            }
         }
     });
     });
